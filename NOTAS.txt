@@ -1,0 +1,32 @@
+* o que é uma API? é um conjunto de definições e protocolos
+
+* kernel - integra o alto nivel com o baixo nivel
+* as ferramentas de cloud sao todas integradas via API
+* AWS por exemplo, via arquivos .json
+* REST (Representional State Transfer):
+	Principais caracteristicas:
+	- Cliente/Servidor: responsabilidades bem definidas
+	- Stateless:não mantem sessao com cliente
+	- Cache: O servidor analisa quando uma informação deve ser mantida em cache
+	- Sistema de camadas
+	- Código sob demanda (opcional)
+	- Interface uniforme: uso correto dos verbos HTTP
+* Endpoint: são locais onde as requisicoes sao atendidas, isto é, endereços URL usados para comunicar uma api a um sistema externo
+* A comunicação com uma API é feita atraves de requisicoes HTTP (requests), e respostas (response).
+* IOT
+* VERBOS HTTP: GET, POST, PUT E DELETE
+* Quem é o servidor: no nosso caso, localhost ou 127.0.0.1
+* A porta do fastAPI é 3000
+http://localhost:8000/r
+
+http --> protocolo
+localhost --> servidor
+8000 --> porta
+r -- > requisição
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+uvicorn main:server
+uvicorn main:server --reload
+http://127.0.0.1:7000/docs
+http://127.0.0.1:7000/redoc
