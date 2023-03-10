@@ -1,0 +1,7 @@
+História dos processadores de tarefas:
+Sequencial --> Concorrência --> Paralelismo --> Concorrência e paralelismo
+Com o tempo, os processadores adotaram técnicas diferentes para ordenar e organizar as tarefas, sempre objetivando a maneira mais eficiente e util para nossas demandas.
+Os cores tem threads, onde  as 
+
+
+Processos síncronos x Processos assíncronos
