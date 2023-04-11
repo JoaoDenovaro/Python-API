@@ -23,4 +23,4 @@ obter_repositorio_pessoa = lambda: repositorio_pessoa
 obter_repositorio_veiculo = lambda: repositorio_veiculo
 obter_repositorio_usuario = lambda: repositorio_usuario
 
-autenticador = lambda: _autenticador
+obter_autenticador = lambda: _autenticador
