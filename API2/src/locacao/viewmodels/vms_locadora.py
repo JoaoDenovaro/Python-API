@@ -16,7 +16,7 @@ class VMLocadora(BaseModel):
     
     @staticmethod
     def converter_modelo(modelo: Locadora):
-        return VMLocadora(uuid1=modelo.uuid, 
+        return VMLocadora(uuid=modelo.uuid, 
                           nome=modelo.nome, 
                           horario_abertura=modelo.horario_abertura,
                           horario_fechamento=modelo.horario_fechamento, 

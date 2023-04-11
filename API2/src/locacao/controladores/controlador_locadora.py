@@ -9,7 +9,8 @@ from locacao.dependencias.singletons import obter_repositorio_locadora
 class ControladorLocadora(ControladorBase):
     
     def __init__(self) -> None:
-        self.endpoints = [self.listar_locadoras]
+        self.endpoints = [self.listar_locadoras, self.consultar_locadora, self.cadastrar_locadora,
+                          self.alterar_locadora, self.remover_locadora, self.alterar_horarios_locadora]
     
     async def listar_locadoras(self, 
         repo : Annotated[RepositorioLocadora, Depends(obter_repositorio_locadora)],
@@ -23,4 +24,76 @@ class ControladorLocadora(ControladorBase):
                                 endereco=endereco)
         return list(map(VMLocadora.converter_modelo, encontrados))
     listar_locadoras.rota = {'path': '/locadora/', 'methods': ['GET']}
+    
+    async def consultar_locadora(self, uuid:str,
+        repo: Annotated[RepositorioLocadora, Depends(obter_repositorio_locadora)]) -> VMLocadora:
         
+        encontrados = repo.filtrar(uuid=uuid)
+        
+        if encontrados:
+            return VMLocadora.converter_modelo(encontrados[0])
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail='Locadora não encontrada')
+        
+    consultar_locadora.rota = {'path': '/locadora/{uuid}', 'methods': ['GET']}
+    
+    async def cadastrar_locadora(self, vm: VMLocadoraSemUUID, 
+        repo: Annotated[RepositorioLocadora, Depends(obter_repositorio_locadora)],
+        util: Annotated[Utilidades, Depends(Utilidades)]) -> VMLocadora:
+
+        uuid = util.uuid36()
+        inserido = repo.inserir(uuid, vm.nome, vm.horario_abertura,
+                                vm.horario_fechamento, vm.endereco)
+        
+        return VMLocadora.converter_modelo(inserido)
+    
+    cadastrar_locadora.rota = {'path': '/locadora/{uuid}', 'methods': ['POST'],
+                               'status_code': status.HTTP_201_CREATED}
+    
+    async def alterar_locadora(self, uuid: str, vm: VMLocadoraSemUUID, 
+        repo: Annotated[RepositorioLocadora, Depends(obter_repositorio_locadora)]) -> VMLocadora:
+        
+        encontrados = repo.filtrar(uuid=uuid)
+        
+        if encontrados:
+            alterado = encontrados[0]
+            alterado.nome = vm.nome
+            alterado.horario_abertura = vm.horario_abertura
+            alterado.horario_fechamento = vm.horario_fechamento
+            alterado.endereco = vm.endereco
+            alterado = repo.alterar(alterado)
+            return VMLocadora.converter_modelo(alterado)
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail='Locadora não encontrada')
+        
+    alterar_locadora.rota = {'path': '/locadora/{uuid}', 'methods': ['PUT']}
+    
+    async def remover_locadora(self, uuid: str,
+        repo: Annotated[RepositorioLocadora, Depends(obter_repositorio_locadora)]) -> VMLocadora:
+        
+        encontrados = repo.filtrar(uuid=uuid)
+        
+        if encontrados:
+            removido = encontrados[0]
+            repo.remover(removido)
+            return VMLocadora.converter_modelo(removido)
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail='Locadora não encontrada')
+        
+    remover_locadora.rota = {'path': '/locadora/{uuid}', 'methods': ['DELETE']}
+    
+    async def alterar_horarios_locadora(self, uuid: str,
+        vm: VMLocadoraHorario, repo: Annotated[RepositorioLocadora,  Depends(obter_repositorio_locadora)]) -> VMLocadora:
+        
+        encontrados = repo.filtrar(uuid=uuid)
+
+        if encontrados:
+            alterado = encontrados[0]
+            alterado.horario_abertura = vm.horario_abertura
+            alterado.horario_fechamento = vm.horario_fechamento
+            alterado = repo.alterar(alterado)
+            return VMLocadora.converter_modelo(alterado)
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail='Locadora não encontrada')
+        
+    alterar_horarios_locadora.rota = {'path': '/locadora/{uuid}', 'methods': ['PATCH']}

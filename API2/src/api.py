@@ -15,7 +15,7 @@ def vincular_controlador(app: FastAPI, controlador: ControladorBase):
 
 app = FastAPI()
 
-control_locadora = ControladorLocadora
+control_locadora = ControladorLocadora()
 
 vincular_controlador(app, control_locadora)
 
